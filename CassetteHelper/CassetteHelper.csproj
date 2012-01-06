@@ -115,7 +115,9 @@
     <Content Include="C:\Users\bluewire\Documents\Visual Studio 2010\Addins\CassetteHelper - For Testing.AddIn">
       <Link>CassetteHelper - For Testing.AddIn</Link>
     </Content>
-    <Content Include="CassetteHelper.AddIn" />
+    <Content Include="CassetteHelper.AddIn">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
