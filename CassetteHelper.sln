@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CassetteHelper", "CassetteHelper\CassetteHelper.csproj", "{806C006A-CE6A-456D-B393-9B806EAC7A55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CassetteHelperTests", "CassetteHelperTests\CassetteHelperTests.csproj", "{5ECE3582-B3CD-403C-B63D-0867681DAE14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{806C006A-CE6A-456D-B393-9B806EAC7A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{806C006A-CE6A-456D-B393-9B806EAC7A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{806C006A-CE6A-456D-B393-9B806EAC7A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ECE3582-B3CD-403C-B63D-0867681DAE14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ECE3582-B3CD-403C-B63D-0867681DAE14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ECE3582-B3CD-403C-B63D-0867681DAE14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ECE3582-B3CD-403C-B63D-0867681DAE14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

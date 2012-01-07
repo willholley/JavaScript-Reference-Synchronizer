@@ -1,0 +1,6 @@
+﻿/// comment
+
+function foo()
+{
+    return;
+}
