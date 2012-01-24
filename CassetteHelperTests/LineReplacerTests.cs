@@ -7,27 +7,39 @@ namespace CassetteHelperTests
     [TestFixture]
     public class LineReplacerTests
     {
-        [Test, ExpectedException(typeof(FileNotFoundException))]
-        public void IfFileDoesNotExistThrowsFileNotFoundException()
+        [Test]
+        public void DoesNotModifyFileWithNoMatches()
         {
-            new LineReplacer("test.js");
-        }
+            var replacer = new LineReplacer("original.js", "replaced.js");
 
-        [Test, ExpectedArgumentNullException("filePath")]
-        [Row("")]
-        [Row(null)]
-        public void NullOrEmptyFilePathThrowsArgumentNullException(string filePath)
-        {
-            new LineReplacer(filePath);
+            using(var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("NoReferences.js"))
+            {
+                var originalWriteTime = File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath);
+
+                replacer.Replace(temporaryFile.AbsolutePath);
+
+                Assert.AreEqual(originalWriteTime, File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath));
+            }
         }
     }
 
     public class LineReplacer
     {
-        public LineReplacer(string filePath)
+        private readonly string originalUrl;
+        private readonly string replacementUrl;
+
+        public LineReplacer(string originalUrl, string replacementUrl)
         {
-            if (string.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath");
-            if(!File.Exists(filePath)) throw new FileNotFoundException("Could not find file to replace lines in", filePath);
+            this.originalUrl = originalUrl;
+            this.replacementUrl = replacementUrl;
+        }
+
+        public void Replace(string targetFilePath)
+        {
+            if (string.IsNullOrEmpty(targetFilePath)) throw new ArgumentNullException("targetFilePath");
+            if (!File.Exists(targetFilePath)) throw new FileNotFoundException("Could not find file to replace lines in", targetFilePath);
+
+
         }
     }
 }
