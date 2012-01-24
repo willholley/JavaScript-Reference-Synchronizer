@@ -87,7 +87,7 @@
     <EmbeddedResource Include="Resources\NoReferences.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SingleApplicationRelativeReference.js" />
+    <EmbeddedResource Include="Resources\SingleReference.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
