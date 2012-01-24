@@ -20,7 +20,7 @@ namespace CassetteHelperTests
         public void WhenNullStreamPassedThrowsArgumentNullException()
         {
             var referenceVisitor = new ReferenceVisitor("test");
-            referenceVisitor.FindReferences(null, r => { });
+            referenceVisitor.Visit(null, r => { }, r => { });
         }
 
         public bool VisitReferences(string resourceName, string urlToSearchFor)
@@ -31,7 +31,7 @@ namespace CassetteHelperTests
                 using (var reader = new StreamReader(input))
                 {
                     bool visited = false;
-                    referenceVisitor.FindReferences(reader, r => visited = true);
+                    referenceVisitor.Visit(reader, r => visited = true, r => { });
 
                     return visited;
                 }

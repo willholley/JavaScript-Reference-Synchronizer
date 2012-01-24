@@ -17,19 +17,37 @@ namespace CassetteHelper
             this.urlToSearchFor = urlToSearchFor.ToLowerInvariant();
         }
 
-        public void FindReferences(StreamReader input, Action<string> onVisit)
+        public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
         {
             if (input == null) throw new ArgumentNullException("input");
 
             string line;
+            bool containsReferences = false;
+
             while ((line = input.ReadLine()) != null)
             {
                 var match = reference.Match(line);
                 if (match.Success && match.Groups["path"].Value.ToLowerInvariant() == urlToSearchFor)
                 {
-                    onVisit(line);
+                    containsReferences = true;
+                    onMatch(line);
+                }
+                else
+                {
+                    onNonMatch(line);
                 }
             }
+
+            return containsReferences;
+        }
+
+        public bool HasReference(StreamReader input)
+        {
+            bool match = false;
+
+            Visit(input, r => match = true, r => { });
+
+            return match;
         }
     }
 }
