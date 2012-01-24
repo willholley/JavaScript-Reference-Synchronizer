@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using CassetteHelper;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests
@@ -56,34 +55,11 @@ namespace CassetteHelperTests
         {
             Assert.IsFalse(VisitReferences("SingleReference.js", "test"));
         }
-        
-        public class ReferenceVisitor
+
+        [Test]
+        public void OnVisitNotCalledWhenReferenceIsNotAValidComment()
         {
-            readonly Regex reference = new Regex("^///\\W+<reference path=\"(?<path>[^\"]+)\"\\W+/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            
-            private readonly string urlToSearchFor;
-
-            public ReferenceVisitor(string urlToSearchFor)
-            {
-                if (string.IsNullOrEmpty(urlToSearchFor)) throw new ArgumentNullException("urlToSearchFor");
-
-                this.urlToSearchFor = urlToSearchFor.ToLowerInvariant();
-            }
-
-            public void FindReferences(StreamReader input, Action<string> onVisit)
-            {
-                if(input == null) throw new ArgumentNullException("input");
-
-                string line;
-                while ((line = input.ReadLine()) != null)
-                {
-                    var match = reference.Match(line);
-                    if (match.Success && match.Groups["path"].Value.ToLowerInvariant() == urlToSearchFor)
-                    {
-                        onVisit(line);
-                    }
-                }
-            }
+            Assert.IsFalse(VisitReferences("NotAValidReference.js", "~/Scripts/First.js"));
         }
     }
 }
