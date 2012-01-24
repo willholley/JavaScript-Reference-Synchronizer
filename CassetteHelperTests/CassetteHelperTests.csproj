@@ -75,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReferenceFinderTests.cs" />
+    <Compile Include="ReferenceVisitorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CassetteHelper\CassetteHelper.csproj">
@@ -85,6 +85,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\NoReferences.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SingleApplicationRelativeReference.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
