@@ -6,7 +6,7 @@ using MbUnit.Framework;
 namespace CassetteHelperTests
 {
     [TestFixture]
-    public class ReferenceVisitorTests
+    public class MatchingLineVisitorTests
     {
         [Test, ExpectedArgumentNullException("urlToSearchFor")]
         [Row("")]
