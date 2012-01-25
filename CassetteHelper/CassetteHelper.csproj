@@ -57,6 +57,7 @@
     <Compile Include="IMatchingStrategy.cs" />
     <Compile Include="StreamReplacer.cs" />
     <Compile Include="MatchingLineVisitor.cs" />
+    <Compile Include="StringURIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
