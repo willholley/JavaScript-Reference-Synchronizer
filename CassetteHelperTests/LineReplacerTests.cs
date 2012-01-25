@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Threading;
 using CassetteHelper;
 using MbUnit.Framework;
 
@@ -12,11 +12,12 @@ namespace CassetteHelperTests
         [Test]
         public void DoesNotModifyFileWithNoMatches()
         {
-            var replacer = new LineReplacer("original.js", "replaced.js");
+            var replacer = new LineReplacer(new NeverMatchingLineVisitor(), "replaced.js");
 
             using(var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("NoReferences.js"))
             {
                 var originalWriteTime = File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath);
+                Thread.Sleep(100); // delay to ensure new write time is correct
 
                 replacer.Replace(temporaryFile.AbsolutePath);
 
@@ -24,44 +25,52 @@ namespace CassetteHelperTests
             }
         }
 
-        [Test]
-        public void ModifiesFileWithMatch()
+        class NeverMatchingLineVisitor : ILineVisitor
         {
-            const string original = "~/Scripts/First.js";
-            const string replaced = "~/Scripts/Replaced.js";
-
-            var replacer = new LineReplacer(original, replaced);
-
-            using (var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("SingleReference.js"))
+            public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
             {
-                AssertHasReference(original, temporaryFile);
-
-                replacer.Replace(temporaryFile.AbsolutePath);
-
-                AssertHasReference(replaced, temporaryFile);
+                onNonMatch("");
+                return false;
             }
         }
 
-        private void AssertHasReference(string original, TemporaryFile temporaryFile)
+        class AlwaysMatchingLineVisitor : ILineVisitor
         {
-            using (var file = File.OpenText(temporaryFile.AbsolutePath))
+            public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
             {
-                Assert.IsTrue(new ReferenceVisitor(original).HasReference(file));
+                onMatch("");
+                return true;
+            }
+        }
+
+        [Test]
+        public void ModifiesFileWithMatch()
+        {
+            var replacer = new LineReplacer(new AlwaysMatchingLineVisitor(), "replaced");
+
+            using (var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("SingleReference.js"))
+            {
+                var originalWriteTime = File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath);
+                Thread.Sleep(100); // delay to ensure new write time is correct
+
+                replacer.Replace(temporaryFile.AbsolutePath);
+                
+                Assert.LessThan(originalWriteTime, File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath));
             }
         }
     }
 
     public class LineReplacer
     {
-        public LineReplacer(string originalUrl, string replacementUrl)
+        private readonly string newReference;
+        private readonly ILineVisitor visitor;
+
+        public LineReplacer(ILineVisitor visitor, string replacementUrl)
         {
-            this.visitor = new ReferenceVisitor(originalUrl);
+            this.visitor = visitor;
             this.newReference = string.Format("/// <reference path=\"{0}\" />", replacementUrl); 
         }
-
-        private readonly string newReference;
-        private readonly ReferenceVisitor visitor;
-
+        
         public void Replace(string targetFilePath)
         {
             if (string.IsNullOrEmpty(targetFilePath)) throw new ArgumentNullException("targetFilePath");

@@ -13,19 +13,19 @@ namespace CassetteHelperTests
         [Row(null)]
         public void WhenNullOrEmptyUrlToSearchForThrowsArgumentNullException(string urlToSearchFor)
         {
-            new ReferenceVisitor(urlToSearchFor);
+            new MatchingLineVisitor(urlToSearchFor);
         }
 
         [Test, ExpectedArgumentNullException("input")]
         public void WhenNullStreamPassedThrowsArgumentNullException()
         {
-            var referenceVisitor = new ReferenceVisitor("test");
+            var referenceVisitor = new MatchingLineVisitor("test");
             referenceVisitor.Visit(null, r => { }, r => { });
         }
 
         public bool VisitReferences(string resourceName, string urlToSearchFor)
         {
-            var referenceVisitor = new ReferenceVisitor(urlToSearchFor);
+            var referenceVisitor = new MatchingLineVisitor(urlToSearchFor);
             using (Stream input = Assembly.GetExecutingAssembly().GetManifestResourceStream("CassetteHelperTests.Resources." + resourceName))
             {
                 using (var reader = new StreamReader(input))

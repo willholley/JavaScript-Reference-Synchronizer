@@ -4,13 +4,18 @@ using System.Text.RegularExpressions;
 
 namespace CassetteHelper
 {
-    public class ReferenceVisitor
+    public interface ILineVisitor
+    {
+        bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch);
+    }
+
+    public class MatchingLineVisitor : ILineVisitor
     {
         readonly Regex reference = new Regex("^///\\W+<reference path=\"(?<path>[^\"]+)\"\\W+/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly string urlToSearchFor;
 
-        public ReferenceVisitor(string urlToSearchFor)
+        public MatchingLineVisitor(string urlToSearchFor)
         {
             if (string.IsNullOrEmpty(urlToSearchFor)) throw new ArgumentNullException("urlToSearchFor");
 
@@ -39,15 +44,6 @@ namespace CassetteHelper
             }
 
             return containsReferences;
-        }
-
-        public bool HasReference(StreamReader input)
-        {
-            bool match = false;
-
-            Visit(input, r => match = true, r => { });
-
-            return match;
         }
     }
 }
