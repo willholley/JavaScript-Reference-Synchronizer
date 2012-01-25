@@ -9,20 +9,31 @@ namespace CassetteHelperTests
     [TestFixture]
     public class LineReplacerTests
     {
-        [Test]
-        public void DoesNotModifyFileWithNoMatches()
+        public void AssertFileLastWriteTimeDifference(ILineVisitor visitor, Action<DateTime, DateTime> assert)
         {
-            var replacer = new LineReplacer(new NeverMatchingLineVisitor(), "replaced.js");
+            var replacer = new LineReplacer(visitor, "replaced.js");
 
-            using(var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("NoReferences.js"))
+            using(var temporaryFile = new TemporaryFile(Path.GetTempFileName()))
             {
                 var originalWriteTime = File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath);
-                Thread.Sleep(100); // delay to ensure new write time is correct
+                Thread.Sleep(100); // delay to ensure we pick up any time difference
 
                 replacer.Replace(temporaryFile.AbsolutePath);
 
-                Assert.AreEqual(originalWriteTime, File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath));
+                assert(originalWriteTime, File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath));
             }
+        }
+
+        [Test]
+        public void DoesNotModifyFileWithNoMatches()
+        {
+            AssertFileLastWriteTimeDifference(new NeverMatchingLineVisitor(), Assert.AreEqual);
+        }
+
+        [Test]
+        public void ModifiesFileWithMatch()
+        {
+            AssertFileLastWriteTimeDifference(new AlwaysMatchingLineVisitor(), Assert.LessThan);
         }
 
         class NeverMatchingLineVisitor : ILineVisitor
@@ -40,22 +51,6 @@ namespace CassetteHelperTests
             {
                 onMatch("");
                 return true;
-            }
-        }
-
-        [Test]
-        public void ModifiesFileWithMatch()
-        {
-            var replacer = new LineReplacer(new AlwaysMatchingLineVisitor(), "replaced");
-
-            using (var temporaryFile = CreateTemporaryFileFrom.EmbeddedResource("SingleReference.js"))
-            {
-                var originalWriteTime = File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath);
-                Thread.Sleep(100); // delay to ensure new write time is correct
-
-                replacer.Replace(temporaryFile.AbsolutePath);
-                
-                Assert.LessThan(originalWriteTime, File.GetLastWriteTimeUtc(temporaryFile.AbsolutePath));
             }
         }
     }
