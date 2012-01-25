@@ -6,35 +6,30 @@ namespace CassetteHelper
 {
     public interface ILineVisitor
     {
-        bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch);
+        bool Visit(TextReader input, Action<string> onMatch, Action<string> onNonMatch);
     }
 
     public class MatchingLineVisitor : ILineVisitor
     {
-        readonly Regex reference = new Regex("^///\\W+<reference path=\"(?<path>[^\"]+)\"\\W+/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly IMatchingStrategy matchingStrategy;
 
-        private readonly string urlToSearchFor;
-
-        public MatchingLineVisitor(string urlToSearchFor)
+        public MatchingLineVisitor(IMatchingStrategy matchingStrategy)
         {
-            if (string.IsNullOrEmpty(urlToSearchFor)) throw new ArgumentNullException("urlToSearchFor");
-
-            this.urlToSearchFor = urlToSearchFor.ToLowerInvariant();
+            this.matchingStrategy = matchingStrategy;
         }
 
-        public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
+        public bool Visit(TextReader input, Action<string> onMatch, Action<string> onNonMatch)
         {
             if (input == null) throw new ArgumentNullException("input");
 
             string line;
-            bool containsReferences = false;
+            bool containsMatches = false;
 
             while ((line = input.ReadLine()) != null)
             {
-                var match = reference.Match(line);
-                if (match.Success && match.Groups["path"].Value.ToLowerInvariant() == urlToSearchFor)
+                if (matchingStrategy.Match(line))
                 {
-                    containsReferences = true;
+                    containsMatches = true;
                     onMatch(line);
                 }
                 else
@@ -43,7 +38,45 @@ namespace CassetteHelper
                 }
             }
 
-            return containsReferences;
+            return containsMatches;
         }
     }
+
+    //public class MatchingLineVisitor : ILineVisitor
+    //{
+    //    readonly Regex reference = new Regex("^///\\W+<reference path=\"(?<path>[^\"]+)\"\\W+/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    //    private readonly string urlToSearchFor;
+
+    //    public MatchingLineVisitor(string urlToSearchFor)
+    //    {
+    //        if (string.IsNullOrEmpty(urlToSearchFor)) throw new ArgumentNullException("urlToSearchFor");
+
+    //        this.urlToSearchFor = urlToSearchFor.ToLowerInvariant();
+    //    }
+
+    //    public bool Visit(TextReader input, Action<string> onMatch, Action<string> onNonMatch)
+    //    {
+    //        if (input == null) throw new ArgumentNullException("input");
+
+    //        string line;
+    //        bool containsReferences = false;
+
+    //        while ((line = input.ReadLine()) != null)
+    //        {
+    //            var match = reference.Match(line);
+    //            if (match.Success && match.Groups["path"].Value.ToLowerInvariant() == urlToSearchFor)
+    //            {
+    //                containsReferences = true;
+    //                onMatch(line);
+    //            }
+    //            else
+    //            {
+    //                onNonMatch(line);
+    //            }
+    //        }
+
+    //        return containsReferences;
+    //    }
+    //}
 }

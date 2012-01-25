@@ -7,11 +7,11 @@ using MbUnit.Framework;
 namespace CassetteHelperTests
 {
     [TestFixture]
-    public class LineReplacerTests
+    public class StreamReplacerTests
     {
         public void AssertFileLastWriteTimeDifference(ILineVisitor visitor, Action<DateTime, DateTime> assert)
         {
-            var replacer = new LineReplacer(visitor, "replaced.js");
+            var replacer = new StreamReplacer(visitor, "replaced.js");
 
             using(var temporaryFile = new TemporaryFile(Path.GetTempFileName()))
             {
@@ -38,7 +38,7 @@ namespace CassetteHelperTests
 
         class NeverMatchingLineVisitor : ILineVisitor
         {
-            public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
+            public bool Visit(TextReader input, Action<string> onMatch, Action<string> onNonMatch)
             {
                 onNonMatch("");
                 return false;
@@ -47,7 +47,7 @@ namespace CassetteHelperTests
 
         class AlwaysMatchingLineVisitor : ILineVisitor
         {
-            public bool Visit(StreamReader input, Action<string> onMatch, Action<string> onNonMatch)
+            public bool Visit(TextReader input, Action<string> onMatch, Action<string> onNonMatch)
             {
                 onMatch("");
                 return true;

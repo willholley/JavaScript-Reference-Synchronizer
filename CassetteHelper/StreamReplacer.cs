@@ -3,12 +3,12 @@ using System.IO;
 
 namespace CassetteHelper
 {
-    public class LineReplacer
+    public class StreamReplacer
     {
         private readonly string newReference;
         private readonly ILineVisitor visitor;
 
-        public LineReplacer(ILineVisitor visitor, string replacementUrl)
+        public StreamReplacer(ILineVisitor visitor, string replacementUrl)
         {
             this.visitor = visitor;
             this.newReference = string.Format("/// <reference path=\"{0}\" />", replacementUrl); 
