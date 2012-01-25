@@ -54,6 +54,7 @@
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LineReplacer.cs" />
     <Compile Include="MatchingLineVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
