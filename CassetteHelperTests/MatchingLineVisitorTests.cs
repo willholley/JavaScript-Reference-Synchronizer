@@ -1,71 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using CassetteHelper;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests
 {
-    //[TestFixture]
-    //public class MatchingLineVisitorTests
-    //{
-    //    [Test, ExpectedArgumentNullException("urlToSearchFor")]
-    //    [Row("")]
-    //    [Row(null)]
-    //    public void WhenNullOrEmptyUrlToSearchForThrowsArgumentNullException(string urlToSearchFor)
-    //    {
-    //        new MatchingLineVisitor(urlToSearchFor);
-    //    }
-
-    //    [Test, ExpectedArgumentNullException("input")]
-    //    public void WhenNullStreamPassedThrowsArgumentNullException()
-    //    {
-    //        var lineVisitor = new MatchingLineVisitor("test");
-    //        lineVisitor.Visit(null, r => { }, r => { });
-    //    }
-
-    //    public bool AssertVisited(string resourceName, string urlToSearchFor)
-    //    {
-    //        var lineVisitor = new MatchingLineVisitor(urlToSearchFor);
-    //        using (Stream input = Assembly.GetExecutingAssembly().GetManifestResourceStream("CassetteHelperTests.Resources." + resourceName))
-    //        {
-    //            using (var reader = new StreamReader(input))
-    //            {
-    //                bool visited = false;
-    //                lineVisitor.Visit(reader, r => visited = true, r => { });
-
-    //                return visited;
-    //            }
-    //        }
-    //    }
-
-    //    [Test]
-    //    public void WhenNoMatchDoesNotCallVisitor()
-    //    {
-
-    //        Assert.IsFalse(AssertVisited("NoReferences.js", "test"));
-    //    }
-
-    //    [Test]
-    //    public void OnVisitCalledWhenApplicationRelativeReferenceFound()
-    //    {
-    //        Assert.IsTrue(AssertVisited("SingleReference.js", "~/Scripts/First.js"));
-    //    }
-
-    //    [Test]
-    //    public void OnVisitNotCalledWhenNonMatchingApplicationRelativeReferenceFound()
-    //    {
-    //        Assert.IsFalse(AssertVisited("SingleReference.js", "test"));
-    //    }
-
-    //    [Test]
-    //    public void OnVisitNotCalledWhenReferenceIsNotAValidComment()
-    //    {
-    //        Assert.IsFalse(AssertVisited("NotAValidReference.js", "~/Scripts/First.js"));
-    //    }
-    //}
-
-
     [TestFixture]
     public class MatchingLineVisitorTests
     {
