@@ -120,6 +120,7 @@
   <ItemGroup>
     <Content Include="C:\Users\bluewire\Documents\Visual Studio 2010\Addins\CassetteHelper - For Testing.AddIn">
       <Link>CassetteHelper - For Testing.AddIn</Link>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="CassetteHelper.AddIn">
       <SubType>Designer</SubType>
