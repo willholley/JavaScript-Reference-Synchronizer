@@ -3,15 +3,14 @@ using System.IO;
 
 namespace CassetteHelper
 {
-    public class StreamReplacer
+    // TODO: this should really just work with a stream to make testing easier
+    public class FileContentReplacer
     {
-        private readonly string newReference;
-        private readonly ILineVisitor visitor;
+        private readonly IReplacementStrategy replacementStrategy;
 
-        public StreamReplacer(ILineVisitor visitor, string replacementUrl)
+        public FileContentReplacer(IReplacementStrategy replacementStrategy)
         {
-            this.visitor = visitor;
-            this.newReference = string.Format("/// <reference path=\"{0}\" />", replacementUrl); 
+            this.replacementStrategy = replacementStrategy;
         }
         
         public void Replace(string targetFilePath)
@@ -21,13 +20,19 @@ namespace CassetteHelper
             
             using (var stringWriter = new StringWriter())
             {
-                bool containsReferences;
+                bool containsReferences = false;
 
                 using (var inputStream = File.OpenText(targetFilePath))
                 {
-                    containsReferences = visitor.Visit(inputStream, 
-                                                       r => stringWriter.WriteLine(this.newReference),
-                                                       stringWriter.WriteLine);
+                    string line;
+
+                    while ((line = inputStream.ReadLine()) != null)
+                    {
+                        var replacement = replacementStrategy.Replace(line);
+                        containsReferences = containsReferences || (line != replacement);
+
+                        stringWriter.WriteLine(replacement);
+                    }
                 }
 
                 if (containsReferences)

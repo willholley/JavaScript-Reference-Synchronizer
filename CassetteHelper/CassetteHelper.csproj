@@ -48,16 +48,16 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationRelativeMatchingStrategy.cs" />
+    <Compile Include="ApplicationRelativeReplacementStrategy.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Connect.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IMatchingStrategy.cs" />
+    <Compile Include="IReplacementStrategy.cs" />
     <Compile Include="ProjectItemExtensions.cs" />
-    <Compile Include="StreamReplacer.cs" />
+    <Compile Include="FileContentReplacer.cs" />
     <Compile Include="MatchingLineVisitor.cs" />
     <Compile Include="StringURIExtensions.cs" />
   </ItemGroup>

@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace CassetteHelper
 {
-    public class ApplicationRelativeMatchingStrategy : IMatchingStrategy
+    public class ApplicationRelativeReplacementStrategy : IReplacementStrategy
     {
         private readonly Regex matchingRegex;
+        private string newReference;
 
-        public ApplicationRelativeMatchingStrategy(string applicationRootDirectory, string originalFilePath)
+        public ApplicationRelativeReplacementStrategy(string applicationRootDirectory, string originalFilePath, string newFilePath)
         {
             if (String.IsNullOrEmpty(applicationRootDirectory)) throw new ArgumentNullException("applicationRootDirectory");
             if (String.IsNullOrEmpty(originalFilePath)) throw new ArgumentNullException("originalFilePath");
@@ -18,11 +19,19 @@ namespace CassetteHelper
             var applicationRelativePath = originalFilePath.URIRelativeTo(applicationRootDirectory);
             this.matchingRegex = new Regex("^\\W*///\\W*<reference\\W+path=\"~/" + applicationRelativePath + "\"\\W*/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             //this.matchingRegex = new Regex("^///\\W+<reference path=\"~/(?<path>[^\"]+)\"\\W+/>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            var replacementApplicationRelativePath = newFilePath.URIRelativeTo(applicationRootDirectory);
+            this.newReference = string.Format("/// <reference path=\"~/{0}\" />", replacementApplicationRelativePath); 
         }
         
-        public bool Match(string line)
+        public string Replace(string line)
         {
-            return !String.IsNullOrWhiteSpace(line) && matchingRegex.IsMatch(line);
+            if(String.IsNullOrWhiteSpace(line))
+            {
+                return line;
+            }
+
+            return matchingRegex.Replace(line, newReference);
         }
     }
 }
