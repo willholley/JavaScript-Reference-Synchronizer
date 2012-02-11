@@ -12,12 +12,12 @@ namespace CassetteHelper
         {
             this.replacementStrategy = replacementStrategy;
         }
-        
+
         public void Replace(string targetFilePath)
         {
             if (string.IsNullOrEmpty(targetFilePath)) throw new ArgumentNullException("targetFilePath");
             if (!File.Exists(targetFilePath)) throw new FileNotFoundException("Could not find file to replace lines in", targetFilePath);
-            
+
             using (var stringWriter = new StringWriter())
             {
                 bool containsReferences = false;

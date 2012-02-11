@@ -21,7 +21,7 @@ namespace CassetteHelper
             }
         }
 
-        public static IEnumerable<string> GetFilesWithExtension(this IEnumerable<ProjectItem> projectItems, string fileExtension)
+        public static IEnumerable<ProjectItem> WithExtension(this IEnumerable<ProjectItem> projectItems, string fileExtension)
         {
             fileExtension = fileExtension.ToLowerInvariant();
 
@@ -32,7 +32,7 @@ namespace CassetteHelper
                     var targetFileName = projectItem.FileNames[i];
                     if (Path.GetExtension(targetFileName).ToLowerInvariant() == fileExtension)
                     {
-                        yield return targetFileName;
+                        yield return projectItem;
                     }
                 }
             }
