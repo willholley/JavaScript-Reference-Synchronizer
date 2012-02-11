@@ -58,7 +58,6 @@
     <Compile Include="IReplacementStrategy.cs" />
     <Compile Include="ProjectItemExtensions.cs" />
     <Compile Include="FileContentReplacer.cs" />
-    <Compile Include="MatchingLineVisitor.cs" />
     <Compile Include="StringURIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
