@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using CassetteHelper.Matching;
+using CassetteHelper.Replacement;
 
 namespace CassetteHelper
 {
@@ -9,11 +10,11 @@ namespace CassetteHelper
     {
         public const string DELETED = "!!DELETED!!12345";
 
-        private readonly IReplacementStrategy replacementStrategy;
+        private readonly IEnumerable<IReplacementStrategy> replacementStrategies;
 
-        public FileContentReplacer(IReplacementStrategy replacementStrategy)
+        public FileContentReplacer(params IReplacementStrategy[] replacementStrategies)
         {
-            this.replacementStrategy = replacementStrategy;
+            this.replacementStrategies = replacementStrategies;
         }
 
         public void Replace(string targetFilePath)
@@ -25,13 +26,25 @@ namespace CassetteHelper
             {
                 bool containsReferences = false;
 
+                foreach (var replacementStrategy in replacementStrategies)
+                {
+                    replacementStrategy.SetContext(targetFilePath);
+                }
+
                 using (var inputStream = File.OpenText(targetFilePath))
                 {
                     string line;
 
                     while ((line = inputStream.ReadLine()) != null)
                     {
-                        var replacement = replacementStrategy.Replace(line);
+                        string replacement = null;
+                        foreach (var replacementStrategy in replacementStrategies)
+                        {
+                            replacement = replacementStrategy.Replace(line);
+
+                            if (line != replacement) break;
+                        }
+
                         containsReferences = containsReferences || (line != replacement);
 
                         // yuk

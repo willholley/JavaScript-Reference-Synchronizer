@@ -75,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationRelativeMatchingStrategyTests.cs" />
+    <Compile Include="FileRelativeMatchingStrategy.cs" />
+    <Compile Include="FileRelativeMatchingStrategyTests.cs" />
     <Compile Include="CreateTemporaryFileFrom.cs" />
     <Compile Include="FileContentReplacerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

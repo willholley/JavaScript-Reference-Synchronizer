@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using CassetteHelper;
-using CassetteHelper.Matching;
+using CassetteHelper.Replacement;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests
@@ -42,6 +42,11 @@ namespace CassetteHelperTests
 
         class NeverMatchStrategy : IReplacementStrategy
         {
+            public void SetContext(string targetFileFullName)
+            {
+                // no op
+            }
+
             public string Replace(string line)
             {
                 return line;
@@ -50,6 +55,11 @@ namespace CassetteHelperTests
 
         class AlwaysMatchStrategy : IReplacementStrategy
         {
+            public void SetContext(string targetFileFullName)
+            {
+                // no op
+            }
+
             public string Replace(string line)
             {
                 return "replaced";

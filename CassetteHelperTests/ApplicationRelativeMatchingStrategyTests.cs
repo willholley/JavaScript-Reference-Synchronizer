@@ -1,6 +1,6 @@
 ﻿using System;
 using CassetteHelper;
-using CassetteHelper.Matching;
+using CassetteHelper.Replacement;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests
@@ -8,24 +8,6 @@ namespace CassetteHelperTests
     [TestFixture]
     public class ApplicationRelativeMatchingStrategyTests
     {
-        [Test]
-        [Row(null, ExpectedException = typeof(ArgumentNullException), ExpectedExceptionMessage = "applicationRootDirectory")]
-        [Row("", ExpectedException = typeof(ArgumentNullException), ExpectedExceptionMessage = "applicationRootDirectory")]
-        [Row(@"c:\iAmAFile.js", ExpectedException = typeof(ArgumentException), ExpectedExceptionMessage = "applicationRootDirectory")]
-        [Row(@"c:\doesNotExist", ExpectedException = typeof(ArgumentException), ExpectedExceptionMessage = "applicationRootDirectory")]
-        public void ApplicationRootMustBeValid(string applicationRootDirectory)
-        {
-            new ApplicationRelativeReplacementStrategy(applicationRootDirectory, "original.js", "replacement.js");
-        }
-
-        [Test, ExpectedArgumentNullException("originalFilePath")]
-        [Row(null)]
-        [Row("")]
-        public void OriginalFilePathMustNotBeNullOrEmpty(string originalFilePath)
-        {
-            new ApplicationRelativeReplacementStrategy(@"c:\", originalFilePath, "replacement.js");
-        }
-
         [Test]
         [Row("/// not a match", "/// not a match")]
         [Row(null, null)]

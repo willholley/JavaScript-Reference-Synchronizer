@@ -1,14 +1,19 @@
-﻿using System.IO;
+﻿using System.Text.RegularExpressions;
 
-namespace CassetteHelper.Matching
+namespace CassetteHelper.Replacement
 {
     public class ApplicationRelativeDeletionStrategy : IReplacementStrategy
     {
-        private readonly ApplicationRelativeMatcher matcher;
+        private readonly Regex matcher;
 
         public ApplicationRelativeDeletionStrategy(string applicationRootDirectory, string originalFilePath)
         {
-            this.matcher = new ApplicationRelativeMatcher(applicationRootDirectory, originalFilePath);
+            this.matcher = ReferenceRegex.ApplicationRelative(applicationRootDirectory, originalFilePath);
+        }
+
+        public void SetContext(string targetFileFullName)
+        {
+            // no op
         }
 
         public string Replace(string line)

@@ -49,7 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Replacement\ApplicationRelativeDeletionStrategy.cs" />
-    <Compile Include="Replacement\ApplicationRelativeMatcher.cs" />
+    <Compile Include="Replacement\FileRelativeDeletionStrategy.cs" />
+    <Compile Include="Replacement\FileRelativeMatchingStrategy.cs" />
+    <Compile Include="Replacement\ReferenceRegex.cs" />
     <Compile Include="Replacement\ApplicationRelativeReplacementStrategy.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
