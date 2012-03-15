@@ -1,4 +1,6 @@
-﻿namespace CassetteHelper
+﻿using System.IO;
+
+namespace CassetteHelper.Matching
 {
     public interface IReplacementStrategy
     {

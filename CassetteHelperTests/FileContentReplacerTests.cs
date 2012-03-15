@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using CassetteHelper;
+using CassetteHelper.Matching;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests

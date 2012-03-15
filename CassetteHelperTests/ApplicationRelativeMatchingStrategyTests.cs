@@ -1,5 +1,6 @@
 ﻿using System;
 using CassetteHelper;
+using CassetteHelper.Matching;
 using MbUnit.Framework;
 
 namespace CassetteHelperTests
