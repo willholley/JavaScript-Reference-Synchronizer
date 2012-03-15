@@ -60,7 +60,6 @@
     <Compile Include="Replacement\IReplacementStrategy.cs" />
     <Compile Include="FileContentReplacer.cs" />
     <Compile Include="StringURIExtensions.cs" />
-    <Compile Include="VisualStudio.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="EnvDTE">
