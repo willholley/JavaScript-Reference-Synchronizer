@@ -56,7 +56,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IReplacementStrategy.cs" />
-    <Compile Include="ProjectItemExtensions.cs" />
     <Compile Include="FileContentReplacer.cs" />
     <Compile Include="StringURIExtensions.cs" />
     <Compile Include="VisualStudio.cs" />
