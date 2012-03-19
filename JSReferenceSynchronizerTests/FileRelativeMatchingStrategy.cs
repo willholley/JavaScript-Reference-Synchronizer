@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using CassetteHelper;
-using CassetteHelper.Replacement;
+using JSReferenceSynchronizer.Replacement;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     public class FileRelativeMatchingStrategy : IReplacementStrategy
     {

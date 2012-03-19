@@ -1,9 +1,7 @@
-﻿using System;
-using CassetteHelper;
-using CassetteHelper.Replacement;
+﻿using JSReferenceSynchronizer.Replacement;
 using MbUnit.Framework;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     [TestFixture]
     public class ApplicationRelativeMatchingStrategyTests

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CassetteHelper.Replacement
+namespace JSReferenceSynchronizer.Replacement
 {
     public class ApplicationRelativeDeletionStrategy : IReplacementStrategy
     {

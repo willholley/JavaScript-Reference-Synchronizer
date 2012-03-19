@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CassetteHelper", "CassetteHelper\CassetteHelper.csproj", "{806C006A-CE6A-456D-B393-9B806EAC7A55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSReferenceSynchronizer", "JSReferenceSynchronizer\JSReferenceSynchronizer.csproj", "{806C006A-CE6A-456D-B393-9B806EAC7A55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CassetteHelperTests", "CassetteHelperTests\CassetteHelperTests.csproj", "{5ECE3582-B3CD-403C-B63D-0867681DAE14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSReferenceSynchronizerTests", "JSReferenceSynchronizerTests\JSReferenceSynchronizerTests.csproj", "{5ECE3582-B3CD-403C-B63D-0867681DAE14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using CassetteHelper;
-using CassetteHelper.Replacement;
+using JSReferenceSynchronizer.Replacement;
 using MbUnit.Framework;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     [TestFixture]
     public class FileContentReplacerTests

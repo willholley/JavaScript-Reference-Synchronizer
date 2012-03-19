@@ -1,7 +1,6 @@
-﻿using CassetteHelper;
-using MbUnit.Framework;
+﻿using MbUnit.Framework;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     [TestFixture]
     public class StringURIExtensionsTests

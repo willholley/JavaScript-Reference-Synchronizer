@@ -1,7 +1,6 @@
-﻿using System.IO;
-using MbUnit.Framework;
+﻿using MbUnit.Framework;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     [TestFixture]
     public class FileRelativeMatchingStrategyTests

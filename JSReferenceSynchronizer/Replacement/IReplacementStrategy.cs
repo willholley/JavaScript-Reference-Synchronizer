@@ -1,4 +1,4 @@
-﻿namespace CassetteHelper.Replacement
+﻿namespace JSReferenceSynchronizer.Replacement
 {
     public interface IReplacementStrategy
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace CassetteHelperTests
+namespace JSReferenceSynchronizer.Tests
 {
     public static class CreateTemporaryFileFrom
     {

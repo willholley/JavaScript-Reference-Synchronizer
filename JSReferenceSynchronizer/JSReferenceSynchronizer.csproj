@@ -10,7 +10,7 @@
     <StartupObject>
     </StartupObject>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>CassetteHelper</AssemblyName>
+    <AssemblyName>JSReferenceSynchronizer</AssemblyName>
     <DeploymentDirectory>.\bin\</DeploymentDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,7 +34,7 @@
     <DocumentationFile>CassetteHelper.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>CassetteHelper</RootNamespace>
+    <RootNamespace>JSReferenceSynchronizer</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -120,11 +120,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="C:\Users\bluewire\Documents\Visual Studio 2010\Addins\CassetteHelper - For Testing.AddIn">
-      <Link>CassetteHelper - For Testing.AddIn</Link>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="CassetteHelper.AddIn">
+    <Content Include="JSReferenceSynchronizer.AddIn">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

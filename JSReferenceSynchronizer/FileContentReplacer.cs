@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using CassetteHelper.Replacement;
+using JSReferenceSynchronizer.Replacement;
 
-namespace CassetteHelper
+namespace JSReferenceSynchronizer
 {
     // TODO: this should really just work with a stream to make testing easier
     public class FileContentReplacer
