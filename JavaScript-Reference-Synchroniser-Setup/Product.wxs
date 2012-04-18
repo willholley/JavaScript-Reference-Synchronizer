@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+   <!--
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    BEGIN CUSTOMIZATION SECTION: Customize these constants
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   -->
+
+   <!-- Ensure that you use YOUR OWN IDs; DO NOT REUSE THESE ONES -->
+   <?define PRODUCT_ID  = "B91074D4-F02B-427F-AB2A-8F6306340A7C" ?>
+   <?define UPGRADE_CODE = "BB16C0B1-9BDF-4AC8-8F0A-4D990DA45240" ?>   
+   <?define VS2010_DLL_FILE_COMPONENT_GUID = "CC3CB54A-96FD-4CC8-AE63-B443FC2B4EAC" ?>
+   <?define VS2010_ADDIN_FILE_COMPONENT_GUID = "17A425FD-2D92-4923-BC2B-5F17FF89B078" ?>
+
+   <?define APP_NAME = "JS Reference Synchronizer" ?>
+   <?define APP_VERSION = "1.0.0.0" ?>
+   <?define DEFAULT_GROUP_NAME = "JS Reference Synchronizer" ?>
+ 
+   <?define DEST_SUB_DIR = "JSReferenceSynchronizer" ?>
+   <?define DLL_FILE_NAME_VS2010 = "JSReferenceSynchronizer.dll" ?>
+   <?define ADDIN_XML_FILE_NAME = "JSReferenceSynchronizer.AddIn" ?>
+   <?define MY_COMPANY_NAME = "Will Holley" ?>
+
+   <!-- Ensure that these values are used for the Connect class -->
+   <?define CONNECT_CLASS_FULL_NAME_VS_2010 = "JSReferenceSynchronizer.Connect" ?>
+
+   <!--
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    END CUSTOMIZATION SECTION
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   -->
+
+   <Product Id="$(var.PRODUCT_ID)"
+            Name="$(var.APP_NAME)"
+            Language="1033"
+            Codepage="1252"
+            Version="$(var.APP_VERSION)"
+            Manufacturer="$(var.MY_COMPANY_NAME)"
+            UpgradeCode="$(var.UPGRADE_CODE)">
+
+      <!-- Define the package indicating that the installation is for "Just me", not "All users" -->
+      <Package InstallScope="perUser" InstallerVersion="200" Compressed="yes" />
+
+      <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+      <!-- Properties to get the installation folders of Visual Studio 2005, 2008 or 2010.
+           If the values can't be retrieved the properties will remain unset (with the FALSE value) and can be used 
+           in boolean expressions later.
+           The properties must be secure in order to the Repair, Change and Remove buttons of the maintenance mode to work correctly.
+      -->
+      <Property Id="VS2010INSTALLATIONFOLDER" Secure="yes">
+         <RegistrySearch Id="VS2010InstallationFolderRegistrySearchId" Type="raw"
+                         Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\10.0" Name="InstallDir"></RegistrySearch>
+      </Property>
+
+      <!-- Launch condition: check that some Visual Studio version is present when the installing.
+           The OR'ed Installed variable ensures that the condition is always true when uninstalling, because we don't
+           need to check that Visual Studio is present when uninstalling.
+      -->
+      <Condition Message="This add-in requires Visual Studio 2010.">
+         Installed OR VS2010INSTALLATIONFOLDER
+      </Condition>
+      
+      <Directory Id="TARGETDIR" Name="SourceDir">
+
+         <!-- Install the files in a subfolder of the AppDataFolder folder (CSIDL_APPDATA) -->
+         <Directory Id="AppDataFolder">
+            
+            <Directory Id="INSTALLLOCATION" Name="$(var.DEST_SUB_DIR)">             
+
+               <!-- Install the dll file of the add-in for Visual Studio 2010 -->
+               <Component Id="VS2010DllFileComponentId" Guid="$(var.VS2010_DLL_FILE_COMPONENT_GUID)">
+
+                  <File Id="VS2010DllFileId" Name="$(var.DLL_FILE_NAME_VS2010)" Vital="yes" DiskId="1" Source="$(var.DLL_FILE_NAME_VS2010)" />
+               
+                  <!-- This registry entry used as KeyPath is required to avoid the following warnings:
+                  ICE38: Component <x> installs to user profile. It must use a registry key under HKCU as its KeyPath not a file.
+                  -->
+                  <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]\VS2010DllFile" Name="Installed" Type="integer" 
+                                 Value="1" KeyPath="yes"/>
+
+               </Component>
+               
+            </Directory>
+
+            <!-- Install the .AddIn XML files in folders where Visual Studio can find them:   
+              - Windows XP: "C:\Documents and Settings\<username>\Application Data\Microsoft\VisualStudio\8.0\AddIns"
+                (9.0 for VS 2008, 10.0 for VS 2010)
+              - Windows Vista / Windows 7: "C:\Users\<username>\AppData\Roaming\Microsoft\VisualStudio\8.0\AddIns"
+                (9.0 for VS 2008, 10.0 for VS 2010)
+              
+              See: "INFO: Default .AddIn file locations for Visual Studio add-ins"
+                   http://www.mztools.com/articles/2008/MZ2008001.aspx
+            -->
+            <Directory Id="MicrosoftDirId" Name="Microsoft">
+
+               <Directory Id="VisualStudioDirId" Name="VisualStudio">
+
+                  <Directory Id="Dir100Id" Name="10.0">
+
+                     <Directory Id="Dir100AddInsId" Name="AddIns">
+
+                        <Component Id="VS2010AddInFileComponentId" Guid="$(var.VS2010_ADDIN_FILE_COMPONENT_GUID)">
+
+                           <!-- Copy the .AddIn file to the folder -->
+                           <File Id="VS2010AddInFileId" Name="$(var.ADDIN_XML_FILE_NAME)" Vital="yes" DiskId="1"
+                                 Source="$(var.ADDIN_XML_FILE_NAME)" />
+
+                           <!-- Modify the Version XML element inside the .AddIn file whose Id is VS2010AddInFileId
+                                to set the value "10.0" (which is the version of VS 2010) -->
+                           <util:XmlFile Id="VS2010SetVersionElement" Action="setValue" File="[#VS2010AddInFileId]"
+                                         ElementPath="/Extensibility/HostApplication/Version" Value="10.0" Sequence="1" />
+
+                           <!-- Modify the Assembly XML element inside the .AddIn file whose Id is VS2010AddInFileId
+                                to set value of the file whose Id is VS2010DllFileId -->
+                           <util:XmlFile Id="VS2010SetAssemblyElement" Action="setValue" File="[#VS2010AddInFileId]"
+                                         ElementPath="/Extensibility/Addin/Assembly" Value="[#VS2010DllFileId]" Sequence="1" />
+
+                           <!-- Modify the FullClassName XML element inside the .AddIn file whose Id is VS2010AddInFileId
+                                to set value of the variable CONNECT_CLASS_FULL_NAME_VS_2010 -->
+                           <util:XmlFile Id="VS2010SetFullClassNameElement" Action="setValue" File="[#VS2010AddInFileId]"
+                                         ElementPath="/Extensibility/Addin/FullClassName"
+                                         Value="$(var.CONNECT_CLASS_FULL_NAME_VS_2010)" Sequence="1" />
+
+                           <!-- This registry entry used as KeyPath is required to avoid the following warnings:
+                                ICE38: Component <x> installs to user profile. It must use a registry key under HKCU as its KeyPath not a file.
+                           -->
+                           <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]\VS2010AddInFile" Name="Installed" 
+                                          Type="integer" Value="1" KeyPath="yes"/>
+
+                        </Component>
+
+                     </Directory>
+
+                  </Directory>
+
+               </Directory>
+
+            </Directory>
+
+         </Directory>
+         
+         
+      </Directory>
+
+      <!-- Create the tree of features of the setup:
+           - A root feature that is always shown (Level=1), expanded, mandatory (can't be absent)
+             and that can't be installed on first use (that is, can't be advertised)
+           - 3 child optional features
+      -->
+      <Feature Id="VSCommonFeatureId" Title="$(var.APP_NAME)" Level="1" AllowAdvertise="no"
+               Description="Common files of the add-in." Display="expand" Absent="disallow">
+        
+         <!-- This child feature is the add-in for Visual Studio 2010 -->
+         <Feature Id="VS2010InstallationFeatureId" Title="Visual Studio 2010"
+                  Description="Installs the add-in for Visual Studio 2010." Level="1" AllowAdvertise="no">
+
+            <!-- The feature is hidden (Level is set to 0) when Visual Studio 2010 is not installed and
+                 it is the first installation (not in maintenance mode)
+            -->
+            <Condition Level="0">NOT Installed AND NOT VS2010INSTALLATIONFOLDER</Condition>
+
+            <!-- Its components are the add-in dll and the .AddIn XML file for Visual Studio 2010 -->
+            <ComponentRef Id="VS2010DllFileComponentId" />
+            <ComponentRef Id="VS2010AddInFileComponentId" />
+        
+         </Feature>
+      
+      </Feature>
+     
+      <!-- Custom action to remove the commands of Visual Studio 2010 when uninstalling the add-in -->
+
+      <CustomAction Id="RemoveVS2010AddInCommands" Script="vbscript" Execute="deferred" Return="ignore">
+         <![CDATA[
+            Set dte = CreateObject("VisualStudio.DTE.10.0")
+            For Each cmd In dte.Commands
+               If InStr(cmd, "$(var.CONNECT_CLASS_FULL_NAME_VS_2010)") <> 0 Then
+                  cmd.Delete()
+               End If
+            Next
+            dte.Quit()
+         ]]>
+      </CustomAction>
+
+      <InstallExecuteSequence>
+         
+         <!-- Execute the defined custom actions to remove the add-in commands from Visual Studio. They must execute when
+              all the following conditions are true:
+              - The setup has already been run
+              - It is not an upgrade
+              - Visual Studio is installed
+              - The add-in feature state (!feature-state) for the Visual Studio version is installed (3 = INSTALLSTATE_LOCAL). See:
+                Conditional Statement Syntax (http://msdn.microsoft.com/en-us/library/aa368012.aspx)
+         -->
+        
+         <Custom Action="RemoveVS2010AddInCommands"
+                 After="RemoveFiles">Installed AND NOT UPGRADINGPRODUCTCODE AND VS2010INSTALLATIONFOLDER 
+                                     AND !VS2010InstallationFeatureId=3</Custom>
+
+      </InstallExecuteSequence>
+      
+      <!-- Use the built-in User interface of the WixUIExtension reference that shows a treeview with features -->
+      <UIRef Id="WixUI_FeatureTree" />
+            
+   </Product>
+
+</Wix>
